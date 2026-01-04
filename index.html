@@ -87,9 +87,24 @@ body{margin:0;background:#fff7f0;font-family:'Segoe UI',Tahoma}
 
 <script>
 const initialProducts=[
-{id:1,name:'Snickers',price:120,img:'https://th.bing.com/th/id/OIP.MYYtQq2aMNmGYsGmIsclvAHaHa',category:'Шоколад'},
-{id:2,name:"M&M's",price:150,img:'https://th.bing.com/th/id/OIP.IeAelO32gglCucpv6kT39QHaHa',category:'Конфеты'},
-{id:3,name:'KitKat',price:110,img:'https://th.bing.com/th/id/OIP.mTg2LetC9lLD1XJqoi-pRgHaEB',category:'Шоколад'}
+{ id: 1, name: "Snickers", price: 120, img: "https://th.bing.com/th/id/OIP.MYYtQq2aMNmGYsGmIsclvAHaHa?w=168&h=180&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1", category: "Шоколад" },
+  { id: 2, name: "M&M's", price: 150, img: "https://th.bing.com/th/id/OIP.IeAelO32gglCucpv6kT39QHaHa?w=174&h=180&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1", category: "Конфеты" },
+  { id: 3, name: "KitKat", price: 110, img: "https://th.bing.com/th/id/OIP.mTg2LetC9lLD1XJqoi-pRgHaEB?w=319&h=180&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1", category: "Шоколад" },
+  { id: 4, name: "Twix", price: 100, img: "https://th.bing.com/th?id=OIF.Dhw2Od%2f44YvjZa52lNxGig&w=238&h=180&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1", category: "Шоколад" },
+  { id: 5, name: "Reese's", price: 180, img: "https://th.bing.com/th/id/OIP.w60nTfW0RXztKn9GVwVb4gHaHa?w=171&h=180&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1", category: "Арахисовые" },
+  { id: 6, name: "Hershey's", price: 140, img: "https://th.bing.com/th/id/OIP.1JwJQwL_YRqILKAeWUWc5wHaHa?w=176&h=180&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1", category: "Шоколад" },
+  { id: 7, name: "Skittles", price: 130, img: "https://th.bing.com/th/id/OIP.XVhZY8EWUyS7e-AeDcEDZgHaHa?w=169&h=180&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1", category: "Конфеты" },
+  { id: 8, name: "Jolly Rancher", price: 110, img: "https://th.bing.com/th/id/OIP.ERrXjrAbdJAiNMZx-36C2wHaHa?w=208&h=208&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1", category: "Леденцы" },
+  { id: 9, name: "Butterfinger", price: 145, img: "https://th.bing.com/th/id/OIP.C0FmST-G2LxZPLhfEwJxkAHaHa?w=171&h=180&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1", category: "Арахисовые" },
+  { id: 10, name: "Milky Way", price: 125, img: "https://th.bing.com/th/id/OIP.nruej9Sd3VmWZikKaEP68AHaDV?w=346&h=157&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1", category: "Шоколад" },
+  { id: 11, name: "Starburst", price: 135, img: "https://th.bing.com/th/id/OIP.eH8sY1q3JbNEDH7sqHu4cAHaHa?w=172&h=180&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1", category: "Жевательные" },
+  { id: 12, name: "Sour Patch Kids", price: 120, img: "https://th.bing.com/th/id/OIP.MU9WNCRWkEX5zH0UinTWEAHaHa?w=180&h=180&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1", category: "Конфеты" },
+  { id: 13, name: "Nerds", price: 95, img: "https://th.bing.com/th/id/OIP.5UKGMcDITCpQ5u_DM95wOAHaHa?w=184&h=184&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1", category: "Конфеты" },
+  { id: 14, name: "Hershey's Kisses", price: 160, img: "https://th.bing.com/th/id/OIP.NAG0wECJwRDfSTsPQSQc9AHaHa?w=220&h=220&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1", category: "Шоколад" },
+  { id: 15, name: "Hubba Bubba", price: 85, img: "https://th.bing.com/th/id/OIP.OuhjQYt09izJ2hBtwXXK3AHaC1?w=336&h=134&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1", category: "Жевательные" },
+  { id: 16, name: "100 Grand", price: 135, img: "https://th.bing.com/th/id/OIP.dU5ZOw3mM_KI45FiStdbhAHaHa?w=169&h=180&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1", category: "Шоколад" },
+  { id: 17, name: "Swedish Fish", price: 105, img: "https://th.bing.com/th/id/OIP.-bfWLnBu8pKGQpzL39CJYAHaHa?w=177&h=180&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1", category: "Жевательные" },
+  { id: 18, name: "Tootsie Roll", price: 90, img: "https://th.bing.com/th/id/OIP.z-u6DuE2fj-Z_6C9jY9SFgHaEK?w=310&h=180&c=7&r=0&o=7&cb=ucfimg2&pid=1.7&rm=3&ucfimg=1", category: "Ириски" },
 ];
 
 const pages=document.querySelectorAll('.page');
