@@ -5,211 +5,123 @@
   <title>Sweet Shop</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-/* ===== CSS ИЗ ТВОЕГО СООБЩЕНИЯ (БЕЗ ИЗМЕНЕНИЙ) ===== */
-/* Общие стили */
-body { margin: 0; background: #fff7f0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-.app { min-height: 100vh; }
-.container { max-width: 1100px; margin: auto; padding: 20px; }
-.header { background: white; box-shadow: 0 5px 20px rgba(0,0,0,.1); position: sticky; top: 0; z-index: 100; }
-.header-inner { display: flex; justify-content: space-between; align-items: center; }
-.logo { color: #ff4e4e; margin: 0; }
-.nav { display: flex; gap: 10px; }
-.nav button { background: none; border: none; cursor: pointer; padding: 8px 15px; border-radius: 20px; }
-.nav button.active { background: #ff4e4e; color: #fff; }
-.products { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
-.product-card { background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,.1); text-align: center; }
-.product-img { height: 120px; object-fit: contain; }
-.product-price { color: #ff4e4e; font-weight: bold; }
-.btn-red { background: #ff4e4e; border: none; color: #fff; padding: 10px 20px; border-radius: 25px; cursor: pointer; }
-.auth-form { max-width: 400px; margin: 50px auto; background: white; padding: 40px; border-radius: 20px; }
-.form-group { margin-bottom: 15px; }
-.form-group input { width: 100%; padding: 10px; }
-.admin-panel { background: white; padding: 30px; border-radius: 20px; }
+body{margin:0;background:#fff7f0;font-family:'Segoe UI',Tahoma}
+.container{max-width:1100px;margin:auto;padding:20px}
+.header{background:#fff;box-shadow:0 5px 20px rgba(0,0,0,.1);position:sticky;top:0}
+.header-inner{display:flex;justify-content:space-between;align-items:center}
+.logo{color:#ff4e4e}
+.nav button{background:none;border:none;cursor:pointer;padding:8px 15px;border-radius:20px}
+.nav button:hover{background:#ff4e4e;color:#fff}
+.products{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.product-card{background:#fff;padding:20px;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,.1);text-align:center}
+.product-img{height:150px;object-fit:contain;width:100%}
+.btn-red{background:#ff4e4e;border:none;color:#fff;padding:10px 20px;border-radius:25px;cursor:pointer}
+.page{display:none}
+.auth-form,.profile-card,.admin-panel{background:#fff;padding:30px;border-radius:20px;max-width:500px;margin:auto}
+.form-group{margin-bottom:10px}
+.form-group input,textarea{width:100%;padding:10px}
+.order{background:#f7f7f7;padding:10px;border-radius:10px;margin-bottom:10px}
 </style>
 </head>
 <body>
 <div class="app">
-
-  <!-- HEADER -->
-  <header class="header">
-    <div class="container header-inner">
-      <h2 class="logo">Sweet Shop</h2>
-      <div class="nav">
-        <button onclick="showPage('shop')">Магазин</button>
-        <button onclick="showPage('cart')">Корзина (<span id="cartCount">0</span>)</button>
-        <button onclick="showPage('profile')">Профиль</button>
-        <button id="adminBtn" onclick="showPage('admin')" style="display:none">Админ</button>
-        <button onclick="logout()">Выйти</button>
-      </div>
+<header class="header">
+  <div class="container header-inner">
+    <h2 class="logo">Sweet Shop</h2>
+    <div class="nav">
+      <button onclick="showPage('shop')">Магазин</button>
+      <button onclick="showPage('cart')">Корзина (<span id="cartCount">0</span>)</button>
+      <button onclick="showPage('profile')">Профиль</button>
+      <button id="adminBtn" onclick="showPage('admin')" style="display:none">Админ</button>
+      <button onclick="logout()">Выйти</button>
     </div>
-  </header>
+  </div>
+</header>
 
-  <main class="container">
+<main class="container">
+<section id="shop" class="page">
+  <h2>Сладости</h2>
+  <div class="products" id="products"></div>
+</section>
 
-    <!-- SHOP -->
-    <section id="shop" class="page">
-      <h2>Сладости</h2>
-      <div class="products" id="products"></div>
-    </section>
+<section id="cart" class="page">
+  <h2>Корзина</h2>
+  <div id="cartItems"></div>
+  <textarea id="orderAddress" placeholder="Адрес доставки"></textarea><br><br>
+  <button class="btn-red" onclick="checkout()">Оформить заказ</button>
+</section>
 
-    <!-- CART -->
-    <section id="cart" class="page" style="display:none">
-      <h2>Корзина</h2>
-      <div id="cartItems"></div>
-      <button class="btn-red" onclick="checkout()">Оформить заказ</button>
-    </section>
+<section id="profile" class="page">
+  <div class="profile-card">
+    <h2>Профиль</h2>
+    <div class="form-group"><input id="profileEmail" disabled></div>
+    <div class="form-group"><input id="profilePhone" placeholder="Телефон"></div>
+    <div class="form-group"><textarea id="profileAddress" placeholder="Адрес доставки"></textarea></div>
+    <div class="form-group"><input id="profileNote" placeholder="Комментарий курьеру"></div>
+    <button class="btn-red" onclick="saveProfile()">Сохранить профиль</button>
+    <h3>История заказов</h3>
+    <div id="orders"></div>
+  </div>
+</section>
 
-    <!-- PROFILE -->
-    <section id="profile" class="page" style="display:none">
-      <h2>Профиль</h2>
-      <p id="profileInfo"></p>
-      <h3>История заказов</h3>
-      <ul id="orders"></ul>
-    </section>
+<section id="admin" class="page">
+  <div class="admin-panel">
+    <h2>Админ-панель</h2>
+    <input id="newName" placeholder="Название">
+    <input id="newPrice" placeholder="Цена">
+    <input id="newImg" placeholder="URL картинки">
+    <button class="btn-red" onclick="addProduct()">Добавить товар</button>
+  </div>
+</section>
 
-    <!-- ADMIN -->
-    <section id="admin" class="page" style="display:none">
-      <div class="admin-panel">
-        <h2>Админ-панель</h2>
-        <input id="newName" placeholder="Название" />
-        <input id="newPrice" placeholder="Цена" />
-        <button class="btn-red" onclick="addProduct()">Добавить товар</button>
-        <div id="adminProducts"></div>
-      </div>
-    </section>
-
-    <!-- AUTH -->
-    <section id="auth" class="page">
-      <form class="auth-form" onsubmit="login(event)">
-        <h2>Вход / Регистрация</h2>
-        <div class="form-group">
-          <input id="email" placeholder="Email" required />
-        </div>
-        <div class="form-group">
-          <input id="password" type="password" placeholder="Пароль" required />
-        </div>
-        <button class="btn-red" type="submit">Войти</button>
-      </form>
-    </section>
-
-  </main>
+<section id="auth" class="page">
+  <form class="auth-form" onsubmit="login(event)">
+    <h2>Вход</h2>
+    <div class="form-group"><input id="email" placeholder="Email" required></div>
+    <div class="form-group"><input id="password" type="password" placeholder="Пароль" required></div>
+    <button class="btn-red">Войти</button>
+  </form>
+</section>
+</main>
 </div>
 
 <script>
-/* ===== ИСПРАВЛЕННАЯ ЛОГИКА БЕЗ СИНТАКСИЧЕСКИХ ОШИБОК ===== */
-const pages = document.querySelectorAll('.page');
-let user = JSON.parse(localStorage.getItem('user'));
-
-let products = JSON.parse(localStorage.getItem('products')) || [
-  { id: 1, name: 'Шоколад', price: 120 },
-  { id: 2, name: 'Мармелад', price: 90 },
-  { id: 3, name: 'Печенье', price: 70 }
+const initialProducts=[
+{id:1,name:'Snickers',price:120,img:'https://th.bing.com/th/id/OIP.MYYtQq2aMNmGYsGmIsclvAHaHa',category:'Шоколад'},
+{id:2,name:"M&M's",price:150,img:'https://th.bing.com/th/id/OIP.IeAelO32gglCucpv6kT39QHaHa',category:'Конфеты'},
+{id:3,name:'KitKat',price:110,img:'https://th.bing.com/th/id/OIP.mTg2LetC9lLD1XJqoi-pRgHaEB',category:'Шоколад'}
 ];
 
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
+const pages=document.querySelectorAll('.page');
+let user=JSON.parse(localStorage.getItem('user'));
+let products=JSON.parse(localStorage.getItem('products'))||initialProducts;
+let cart=JSON.parse(localStorage.getItem('cart'))||[];
 
-function showPage(id) {
-  pages.forEach(p => p.style.display = 'none');
-  const page = document.getElementById(id);
-  if (page) page.style.display = 'block';
-  if (id === 'cart') renderCart();
-}
+function showPage(id){pages.forEach(p=>p.style.display='none');document.getElementById(id).style.display='block';if(id==='cart')renderCart();if(id==='profile')renderProfile()}
 
-function renderProducts() {
-  const el = document.getElementById('products');
-  el.innerHTML = '';
-  products.forEach(p => {
-    el.innerHTML +=
-      '<div class="product-card">' +
-      '<h4>' + p.name + '</h4>' +
-      '<p class="product-price">' + p.price + ' ₽</p>' +
-      '<button class="btn-red" onclick="addToCart(' + p.id + ')">В корзину</button>' +
-      '</div>';
-  });
-}
+function renderProducts(){const el=productsDiv();el.innerHTML='';products.forEach(p=>{el.innerHTML+=`<div class='product-card'><img class='product-img' src='${p.img}'><h4>${p.name}</h4><p>${p.price} ₽</p><button class='btn-red' onclick='addToCart(${p.id})'>В корзину</button></div>`})}
+function productsDiv(){return document.getElementById('products')}
 
-function addToCart(id) {
-  cart.push(id);
-  localStorage.setItem('cart', JSON.stringify(cart));
-  updateCart();
-}
+function addToCart(id){cart.push(id);save('cart',cart);updateCart()}
+function updateCart(){cartCount.innerText=cart.length}
 
-function updateCart() {
-  document.getElementById('cartCount').innerText = cart.length;
-}
+function renderCart(){const el=document.getElementById('cartItems');el.innerHTML='';if(!cart.length){el.innerHTML='Корзина пуста';return}cart.forEach(id=>{const p=products.find(x=>x.id===id);if(p)el.innerHTML+=`<p>${p.name} — ${p.price} ₽</p>`})}
 
-function renderCart() {
-  const el = document.getElementById('cartItems');
-  el.innerHTML = '';
+function checkout(){const address=orderAddress.value||user.address||'';const order={date:new Date().toLocaleString(),items:[...cart],address};user.orders.push(order);cart=[];save('cart',cart);save('user',user);updateCart();alert('Заказ оформлен')}
 
-  if (cart.length === 0) {
-    el.innerHTML = '<p>Корзина пуста</p>';
-    return;
-  }
+function renderProfile(){profileEmail.value=user.email;profilePhone.value=user.phone||'';profileAddress.value=user.address||'';profileNote.value=user.note||'';renderOrders()}
 
-  cart.forEach(id => {
-    const p = products.find(x => x.id === id);
-    if (p) {
-      el.innerHTML += '<p>' + p.name + ' — ' + p.price + ' ₽</p>';
-    }
-  });
-}
+function renderOrders(){const el=document.getElementById('orders');el.innerHTML='';if(!user.orders.length){el.innerHTML='<p>Заказов нет</p>';return}user.orders.forEach(o=>{let sum=0;let items=o.items.map(id=>{const p=products.find(x=>x.id===id);if(p){sum+=p.price;return p.name}}).join(', ');el.innerHTML+=`<div class='order'><b>${o.date}</b><br>${items}<br>Адрес: ${o.address}<br>Сумма: ${sum} ₽</div>`})}
 
-function checkout() {
-  if (!user) return;
-  user.orders.push(cart.slice());
-  cart = [];
-  localStorage.setItem('cart', JSON.stringify(cart));
-  localStorage.setItem('user', JSON.stringify(user));
-  updateCart();
-  renderCart();
-  alert('Заказ оформлен');
-}
+function saveProfile(){user.phone=profilePhone.value;user.address=profileAddress.value;user.note=profileNote.value;save('user',user);alert('Профиль сохранён')}
 
-function login(e) {
-  e.preventDefault();
-  const emailVal = document.getElementById('email').value;
-  user = {
-    email: emailVal,
-    admin: emailVal === 'admin@admin',
-    orders: []
-  };
-  localStorage.setItem('user', JSON.stringify(user));
-  init();
-}
+function login(e){e.preventDefault();const email=emailInput();user={email,admin:email==='admin@admin',orders:[]};save('user',user);init()}
+function emailInput(){return document.getElementById('email').value.trim()}
+function logout(){localStorage.clear();location.reload()}
+function addProduct(){products.push({id:Date.now(),name:newName.value,price:+newPrice.value,img:newImg.value,category:'Другое'});save('products',products);renderProducts()}
+function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
 
-function logout() {
-  localStorage.removeItem('user');
-  location.reload();
-}
-
-function addProduct() {
-  const name = document.getElementById('newName').value;
-  const price = Number(document.getElementById('newPrice').value);
-  if (!name || !price) return;
-
-  products.push({ id: Date.now(), name: name, price: price });
-  localStorage.setItem('products', JSON.stringify(products));
-  renderProducts();
-}
-
-function init() {
-  if (!user) {
-    showPage('auth');
-    return;
-  }
-
-  showPage('shop');
-  renderProducts();
-  updateCart();
-
-  document.getElementById('profileInfo').innerText = user.email;
-
-  if (user.admin) {
-    document.getElementById('adminBtn').style.display = 'inline-block';
-  }
-}
-
+function init(){if(!user){showPage('auth');return}showPage('shop');renderProducts();updateCart();adminBtn.style.display=user.admin?'inline-block':'none'}
 init();
 </script>
 </body>
