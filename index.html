@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sweet Shop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+/* ===== CSS ИЗ ТВОЕГО СООБЩЕНИЯ (БЕЗ ИЗМЕНЕНИЙ) ===== */
+/* Общие стили */
+body { margin: 0; background: #fff7f0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+.app { min-height: 100vh; }
+.container { max-width: 1100px; margin: auto; padding: 20px; }
+.header { background: white; box-shadow: 0 5px 20px rgba(0,0,0,.1); position: sticky; top: 0; z-index: 100; }
+.header-inner { display: flex; justify-content: space-between; align-items: center; }
+.logo { color: #ff4e4e; margin: 0; }
+.nav { display: flex; gap: 10px; }
+.nav button { background: none; border: none; cursor: pointer; padding: 8px 15px; border-radius: 20px; }
+.nav button.active { background: #ff4e4e; color: #fff; }
+.products { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.product-card { background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,.1); text-align: center; }
+.product-img { height: 120px; object-fit: contain; }
+.product-price { color: #ff4e4e; font-weight: bold; }
+.btn-red { background: #ff4e4e; border: none; color: #fff; padding: 10px 20px; border-radius: 25px; cursor: pointer; }
+.auth-form { max-width: 400px; margin: 50px auto; background: white; padding: 40px; border-radius: 20px; }
+.form-group { margin-bottom: 15px; }
+.form-group input { width: 100%; padding: 10px; }
+.admin-panel { background: white; padding: 30px; border-radius: 20px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="container header-inner">
+      <h2 class="logo">Sweet Shop</h2>
+      <div class="nav">
+        <button onclick="showPage('shop')">Магазин</button>
+        <button onclick="showPage('cart')">Корзина (<span id="cartCount">0</span>)</button>
+        <button onclick="showPage('profile')">Профиль</button>
+        <button id="adminBtn" onclick="showPage('admin')" style="display:none">Админ</button>
+        <button onclick="logout()">Выйти</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- SHOP -->
+    <section id="shop" class="page">
+      <h2>Сладости</h2>
+      <div class="products" id="products"></div>
+    </section>
+
+    <!-- CART -->
+    <section id="cart" class="page" style="display:none">
+      <h2>Корзина</h2>
+      <div id="cartItems"></div>
+      <button class="btn-red" onclick="checkout()">Оформить заказ</button>
+    </section>
+
+    <!-- PROFILE -->
+    <section id="profile" class="page" style="display:none">
+      <h2>Профиль</h2>
+      <p id="profileInfo"></p>
+      <h3>История заказов</h3>
+      <ul id="orders"></ul>
+    </section>
+
+    <!-- ADMIN -->
+    <section id="admin" class="page" style="display:none">
+      <div class="admin-panel">
+        <h2>Админ-панель</h2>
+        <input id="newName" placeholder="Название" />
+        <input id="newPrice" placeholder="Цена" />
+        <button class="btn-red" onclick="addProduct()">Добавить товар</button>
+        <div id="adminProducts"></div>
+      </div>
+    </section>
+
+    <!-- AUTH -->
+    <section id="auth" class="page">
+      <form class="auth-form" onsubmit="login(event)">
+        <h2>Вход / Регистрация</h2>
+        <div class="form-group">
+          <input id="email" placeholder="Email" required />
+        </div>
+        <div class="form-group">
+          <input id="password" type="password" placeholder="Пароль" required />
+        </div>
+        <button class="btn-red" type="submit">Войти</button>
+      </form>
+    </section>
+
+  </main>
+</div>
+
+<script>
+/* ===== ИСПРАВЛЕННАЯ ЛОГИКА БЕЗ СИНТАКСИЧЕСКИХ ОШИБОК ===== */
+const pages = document.querySelectorAll('.page');
+let user = JSON.parse(localStorage.getItem('user'));
+
+let products = JSON.parse(localStorage.getItem('products')) || [
+  { id: 1, name: 'Шоколад', price: 120 },
+  { id: 2, name: 'Мармелад', price: 90 },
+  { id: 3, name: 'Печенье', price: 70 }
+];
+
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+function showPage(id) {
+  pages.forEach(p => p.style.display = 'none');
+  const page = document.getElementById(id);
+  if (page) page.style.display = 'block';
+  if (id === 'cart') renderCart();
+}
+
+function renderProducts() {
+  const el = document.getElementById('products');
+  el.innerHTML = '';
+  products.forEach(p => {
+    el.innerHTML +=
+      '<div class="product-card">' +
+      '<h4>' + p.name + '</h4>' +
+      '<p class="product-price">' + p.price + ' ₽</p>' +
+      '<button class="btn-red" onclick="addToCart(' + p.id + ')">В корзину</button>' +
+      '</div>';
+  });
+}
+
+function addToCart(id) {
+  cart.push(id);
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateCart();
+}
+
+function updateCart() {
+  document.getElementById('cartCount').innerText = cart.length;
+}
+
+function renderCart() {
+  const el = document.getElementById('cartItems');
+  el.innerHTML = '';
+
+  if (cart.length === 0) {
+    el.innerHTML = '<p>Корзина пуста</p>';
+    return;
+  }
+
+  cart.forEach(id => {
+    const p = products.find(x => x.id === id);
+    if (p) {
+      el.innerHTML += '<p>' + p.name + ' — ' + p.price + ' ₽</p>';
+    }
+  });
+}
+
+function checkout() {
+  if (!user) return;
+  user.orders.push(cart.slice());
+  cart = [];
+  localStorage.setItem('cart', JSON.stringify(cart));
+  localStorage.setItem('user', JSON.stringify(user));
+  updateCart();
+  renderCart();
+  alert('Заказ оформлен');
+}
+
+function login(e) {
+  e.preventDefault();
+  const emailVal = document.getElementById('email').value;
+  user = {
+    email: emailVal,
+    admin: emailVal === 'admin@admin',
+    orders: []
+  };
+  localStorage.setItem('user', JSON.stringify(user));
+  init();
+}
+
+function logout() {
+  localStorage.removeItem('user');
+  location.reload();
+}
+
+function addProduct() {
+  const name = document.getElementById('newName').value;
+  const price = Number(document.getElementById('newPrice').value);
+  if (!name || !price) return;
+
+  products.push({ id: Date.now(), name: name, price: price });
+  localStorage.setItem('products', JSON.stringify(products));
+  renderProducts();
+}
+
+function init() {
+  if (!user) {
+    showPage('auth');
+    return;
+  }
+
+  showPage('shop');
+  renderProducts();
+  updateCart();
+
+  document.getElementById('profileInfo').innerText = user.email;
+
+  if (user.admin) {
+    document.getElementById('adminBtn').style.display = 'inline-block';
+  }
+}
+
+init();
+</script>
+</body>
+</html>
